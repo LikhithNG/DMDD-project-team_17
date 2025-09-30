@@ -1,4 +1,5 @@
-# DMDD-project-team_17
+# Smart Hydroponic Farm Management System
+
 
 # Steps to Execute 
 ## Project Setup
