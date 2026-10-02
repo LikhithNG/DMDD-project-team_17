@@ -451,6 +451,7 @@ PROCEDURE add_order_item(
     v_available_quantity DECIMAL(10,2);
     v_price_per_100g DECIMAL(10,2);
     v_crop_type_id NUMBER;
+    c_price_units_per_kg CONSTANT NUMBER := 10;  -- price is per 100g, quantity is in kg
 BEGIN
     -- Lock the HARVESTED_CROPS row first to prevent conflict with order updates
     SELECT available_quantity_kg, crop_type_id 
@@ -493,12 +494,12 @@ BEGIN
 
     -- Update order total in ORDERS
     UPDATE ORDERS
-    SET total_amount = total_amount + (p_quantity_kg * 10 * v_price_per_100g)
+    SET total_amount = total_amount + (p_quantity_kg * c_price_units_per_kg * v_price_per_100g)
     WHERE order_id = p_order_id;
 
 EXCEPTION
     WHEN OTHERS THEN
-        ROLLBACK;  -- Rollback the transaction in case of error
+        -- No ROLLBACK here: the calling procedure handles transaction control
         IF SQLCODE = -54 THEN  -- ORA-00054: resource busy
             RAISE_APPLICATION_ERROR(-20003, 'Resource busy, try again later');
         ELSE
@@ -891,7 +892,7 @@ END;
 
 -- Grant package execution rights
 GRANT EXECUTE ON hydro_admin.customer_mgmt_pkg TO sales_manager_role;
-GRANT EXECUTE ON hydro_admin.facility_mgmt_pkg TO hydro_admin, agronomist_role;
+GRANT EXECUTE ON hydro_admin.facility_mgmt_pkg TO agronomist_role;
 GRANT EXECUTE ON hydro_admin.crop_mgmt_pkg TO agronomist_role;
 GRANT EXECUTE ON harvest_mgmt_pkg TO agronomist_role;
 GRANT EXECUTE ON sensor_mgmt_pkg TO agronomist_role, technician_role;
@@ -899,7 +900,6 @@ GRANT EXECUTE ON order_mgmt_pkg TO sales_manager_role;
 
 -- Grant sequence access
 GRANT SELECT ON hydro_admin.customers_seq TO sales_manager_role;
-GRANT SELECT ON hydro_admin.greenhouse_seq TO hydro_admin;
 GRANT SELECT ON hydro_admin.plant_bed_seq TO agronomist_role;
 GRANT SELECT ON hydro_admin.crop_type_seq TO agronomist_role;
 GRANT SELECT ON hydro_admin.growth_cycle_seq TO agronomist_role;
