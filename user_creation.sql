@@ -6,6 +6,8 @@ ACCEPT tech_pw  CHAR PROMPT 'Password for hydro_technician: ' HIDE
 ACCEPT agri_pw  CHAR PROMPT 'Password for hydro_agronomist: ' HIDE
 ACCEPT sales_pw CHAR PROMPT 'Password for hydro_sales_manager: ' HIDE
 ACCEPT cust_pw  CHAR PROMPT 'Password for hydro_customer: ' HIDE
+-- Must match the tablespace used in admin_setup.sql (DATA on Oracle Autonomous Database).
+ACCEPT app_tbs  CHAR DEFAULT 'USERS' PROMPT 'Tablespace for user quotas [USERS]: '
 
 -- Drop roles if they exist
 BEGIN
@@ -66,6 +68,12 @@ BEGIN
 END;
 /
 
+-- Allow members of each application role to log in
+-- (requires CREATE SESSION WITH ADMIN OPTION, granted in admin_setup.sql)
+GRANT CREATE SESSION TO technician_role;
+GRANT CREATE SESSION TO agronomist_role;
+GRANT CREATE SESSION TO sales_manager_role;
+
 -- Create users and assign roles
 BEGIN
    FOR user_rec IN (
@@ -95,7 +103,7 @@ BEGIN
        SELECT 'hydro_customer' AS user_name, '20M' AS quota FROM dual
    ) LOOP
        BEGIN
-           EXECUTE IMMEDIATE 'ALTER USER ' || user_quota.user_name || ' QUOTA ' || user_quota.quota || ' ON users';
+           EXECUTE IMMEDIATE 'ALTER USER ' || user_quota.user_name || ' QUOTA ' || user_quota.quota || ' ON &app_tbs';
            DBMS_OUTPUT.PUT_LINE('Set quota of ' || user_quota.quota || ' for user: ' || user_quota.user_name);
        EXCEPTION
            WHEN OTHERS THEN
@@ -105,4 +113,4 @@ BEGIN
 END;
 /
 
-UNDEFINE tech_pw agri_pw sales_pw cust_pw
+UNDEFINE tech_pw agri_pw sales_pw cust_pw app_tbs
