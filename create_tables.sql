@@ -131,17 +131,32 @@ ADD CONSTRAINT chk_order_item_quantity
 ALTER TABLE GROWTH_CYCLE 
 ADD CONSTRAINT chk_growth_cycle_stage 
     CHECK (stage IN ('Seedling', 'Vegetative', 'Flowering', 'Harvest'));
+
+-- Indexes on foreign key columns (Oracle does not create these automatically).
+-- SENSORS.plant_bed_id and SENSOR_LOGS.sensor_id are already covered by the
+-- leading columns of their UNIQUE constraints.
+CREATE INDEX idx_pb_greenhouse_id    ON PLANT_BEDS (greenhouse_id);
+CREATE INDEX idx_pb_crop_type_id     ON PLANT_BEDS (crop_type_id);
+CREATE INDEX idx_pb_growth_cycle_id  ON PLANT_BEDS (growth_cycle_id);
+CREATE INDEX idx_gc_crop_type_id     ON GROWTH_CYCLE (crop_type_id);
+CREATE INDEX idx_gc_plant_bed_id     ON GROWTH_CYCLE (plant_bed_id);
+CREATE INDEX idx_hc_crop_type_id     ON HARVESTED_CROPS (crop_type_id);
+CREATE INDEX idx_hc_growth_cycle_id  ON HARVESTED_CROPS (growth_cycle_id);
+CREATE INDEX idx_hc_order_item_id    ON HARVESTED_CROPS (order_item_id);
+CREATE INDEX idx_orders_customer_id  ON ORDERS (customer_id);
+CREATE INDEX idx_oi_order_id         ON ORDER_ITEMS (order_id);
+CREATE INDEX idx_oi_harvest_id       ON ORDER_ITEMS (harvest_id);
     
     
 --    
 ---- synoonyms 
 ------ Create public synonyms for easier access
-CREATE PUBLIC SYNONYM CUSTOMERS FOR hydro_admin.CUSTOMERS; --
-CREATE PUBLIC SYNONYM ORDERS FOR hydro_admin.ORDERS; --
-CREATE PUBLIC SYNONYM ORDER_ITEMS FOR hydro_admin.ORDER_ITEMS; --
-CREATE PUBLIC SYNONYM SENSORS FOR hydro_admin.SENSORS; 
-CREATE PUBLIC SYNONYM SENSOR_LOGS FOR hydro_admin.SENSOR_LOGS;
-CREATE PUBLIC SYNONYM CROP_TYPES FOR hydro_admin.CROP_TYPES;
-CREATE PUBLIC SYNONYM GROWTH_CYCLE FOR hydro_admin.GROWTH_CYCLE;
-CREATE PUBLIC SYNONYM GREENHOUSES FOR hydro_admin.GREENHOUSES;
-CREATE PUBLIC SYNONYM PLANT_BEDS FOR hydro_admin.PLANT_BEDS;
+CREATE OR REPLACE PUBLIC SYNONYM CUSTOMERS FOR hydro_admin.CUSTOMERS; --
+CREATE OR REPLACE PUBLIC SYNONYM ORDERS FOR hydro_admin.ORDERS; --
+CREATE OR REPLACE PUBLIC SYNONYM ORDER_ITEMS FOR hydro_admin.ORDER_ITEMS; --
+CREATE OR REPLACE PUBLIC SYNONYM SENSORS FOR hydro_admin.SENSORS; 
+CREATE OR REPLACE PUBLIC SYNONYM SENSOR_LOGS FOR hydro_admin.SENSOR_LOGS;
+CREATE OR REPLACE PUBLIC SYNONYM CROP_TYPES FOR hydro_admin.CROP_TYPES;
+CREATE OR REPLACE PUBLIC SYNONYM GROWTH_CYCLE FOR hydro_admin.GROWTH_CYCLE;
+CREATE OR REPLACE PUBLIC SYNONYM GREENHOUSES FOR hydro_admin.GREENHOUSES;
+CREATE OR REPLACE PUBLIC SYNONYM PLANT_BEDS FOR hydro_admin.PLANT_BEDS;
