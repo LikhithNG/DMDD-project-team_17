@@ -1,11 +1,4 @@
 CREATE OR REPLACE PACKAGE hydro_admin.simulation_pkg IS
-    PROCEDURE generate_sensor_readings;
-    PROCEDURE progress_growth_cycles;
-    PROCEDURE simulate_week;
-END simulation_pkg;
-/
-
-CREATE OR REPLACE PACKAGE hydro_admin.simulation_pkg IS
     PROCEDURE simulate_week(p_current_date IN DATE DEFAULT SYSDATE);
 END simulation_pkg;
 /
