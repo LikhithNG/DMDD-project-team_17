@@ -14,7 +14,7 @@ Admin account created
 2 - Login as project admin to setup the table, roles & users
 
 User name : hydro_admin,
-Password : NeuBoston2024#
+Password : <the password you entered when running admin_setup.sql>
 
  - `Execute user_creation.sql`
  - `Execute admin_setup.sql`
@@ -33,7 +33,7 @@ As a project admin they setup the Greenhouses & Plant Beds.
 7 - To create views, Log back in as admin, 
 
 User name : hydro_admin,
-Password : NeuBoston2024#
+Password : <the password you entered when running admin_setup.sql>
 
  - `Execute reports.sql`
 

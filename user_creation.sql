@@ -1,4 +1,11 @@
 SET SERVEROUTPUT ON;
+-- Passwords are prompted for at run time (never stored in this file).
+-- SQL*Plus / SQL Developer substitutes &vars before the PL/SQL block is sent.
+SET VERIFY OFF
+ACCEPT tech_pw  CHAR PROMPT 'Password for hydro_technician: ' HIDE
+ACCEPT agri_pw  CHAR PROMPT 'Password for hydro_agronomist: ' HIDE
+ACCEPT sales_pw CHAR PROMPT 'Password for hydro_sales_manager: ' HIDE
+ACCEPT cust_pw  CHAR PROMPT 'Password for hydro_customer: ' HIDE
 
 -- Drop roles if they exist
 BEGIN
@@ -62,10 +69,10 @@ END;
 -- Create users and assign roles
 BEGIN
    FOR user_rec IN (
-       SELECT 'hydro_technician' AS user_name, 'technician_role' AS role_name, 'Techpassword20#' AS password FROM dual UNION ALL
-       SELECT 'hydro_agronomist' AS user_name, 'agronomist_role' AS role_name, 'Agripassword20#' AS password FROM dual UNION ALL
-       SELECT 'hydro_sales_manager' AS user_name, 'sales_manager_role' AS role_name, 'Salespassword20#' AS password FROM dual UNION ALL
-       SELECT 'hydro_customer' AS user_name, 'customer_role' AS role_name, 'Cuspassword20#' AS password FROM dual
+       SELECT 'hydro_technician' AS user_name, 'technician_role' AS role_name, '&tech_pw' AS password FROM dual UNION ALL
+       SELECT 'hydro_agronomist' AS user_name, 'agronomist_role' AS role_name, '&agri_pw' AS password FROM dual UNION ALL
+       SELECT 'hydro_sales_manager' AS user_name, 'sales_manager_role' AS role_name, '&sales_pw' AS password FROM dual UNION ALL
+       SELECT 'hydro_customer' AS user_name, 'customer_role' AS role_name, '&cust_pw' AS password FROM dual
    ) LOOP
        BEGIN
            EXECUTE IMMEDIATE 'CREATE USER ' || user_rec.user_name || ' IDENTIFIED BY "' || user_rec.password || '"';
@@ -97,3 +104,5 @@ BEGIN
    END LOOP;
 END;
 /
+
+UNDEFINE tech_pw agri_pw sales_pw cust_pw

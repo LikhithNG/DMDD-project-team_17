@@ -1,3 +1,8 @@
+-- Run as the database ADMIN user.
+-- The hydro_admin password is prompted for at run time (never stored in this file).
+SET VERIFY OFF
+ACCEPT admin_pw CHAR PROMPT 'Password for hydro_admin: ' HIDE
+
 BEGIN
    -- Drop the user if it exists
    BEGIN
@@ -11,7 +16,7 @@ BEGIN
    END;
 
    -- Create the user
-   EXECUTE IMMEDIATE 'CREATE USER hydro_admin IDENTIFIED BY "NeuBoston2024#"';
+   EXECUTE IMMEDIATE 'CREATE USER hydro_admin IDENTIFIED BY "&admin_pw"';
 
    -- Grant privileges to the user
    EXECUTE IMMEDIATE 'GRANT CONNECT TO hydro_admin';
@@ -78,3 +83,5 @@ GRANT DEBUG ANY PROCEDURE TO hydro_admin;
 
 -- RESET 
 --drop user hydro_admin cascade;
+
+UNDEFINE admin_pw
