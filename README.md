@@ -1,3 +1,19 @@
+<!-- themed-header:start -->
+<a href="https://likhith-ng-portfolio.vercel.app/#proj-hydroponic"><img src="docs/readme/hero.svg" width="100%" alt="Smart Hydroponic Farm Management System: Designed a normalized Oracle database for 3 simulated farms that tracks 50,000+ crop, nutrient, environmental, inventory and harvest transactions."></a>
+
+<p align="center">
+  <a href="https://likhith-ng-portfolio.vercel.app/#proj-hydroponic"><img alt="See it on my portfolio" src="https://img.shields.io/badge/see%20it%20on-my%20portfolio-a5a1f0?style=for-the-badge&labelColor=1d1e23"></a>
+  <a href="https://github.com/LikhithNG"><img alt="More of my work" src="https://img.shields.io/badge/more%20of%20my%20work-github.com%2FLikhithNG-5eead4?style=for-the-badge&labelColor=1d1e23"></a>
+</p>
+
+**At a glance**
+
+- Designed a normalized Oracle database for 3 simulated farms that tracks 50,000+ crop, nutrient, environmental, inventory and harvest transactions.
+- Wrote PL/SQL packages, triggers, governed SQL views and role-based access controls, cutting analytical query time by 45% and report preparation time by 50%.
+
+---
+<!-- themed-header:end -->
+
 # Smart Hydroponic Farm Management System
 
 An Oracle SQL / PL-SQL schema for running hydroponic greenhouses. It covers
